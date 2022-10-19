@@ -155,10 +155,9 @@ class PostPagesTests(TestCase):
                 self.assertIsInstance(form_field, expected)
                 self.assertIn('form', response.context)
                 self.assertNotIn('is_edit', response.context)
-        
+
         form = response.context.get('form')
         self.assertIsInstance(form, PostForm)
-
 
     def test_post_edit_show_correct_context(self):
         """Шаблон post_edit передается с соответствующим контекстом."""

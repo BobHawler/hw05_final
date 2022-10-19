@@ -19,7 +19,8 @@ class PostGroup(admin.ModelAdmin):
 
 @admin.register(Comment)
 class PostComment(admin.ModelAdmin):
-   list_display = ('post', 'author', 'text', 'created', )
+    list_display = ('post', 'author', 'text', 'created', )
+
 
 @admin.register(Follow)
 class PostFollow(admin.ModelAdmin):
