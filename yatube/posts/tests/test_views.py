@@ -9,6 +9,8 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase
 from django.urls import reverse
 
+from ..forms import PostForm
+
 from ..models import Comment, Follow, Group, Post
 
 User = get_user_model()
@@ -78,7 +80,7 @@ class PostPagesTests(TestCase):
         templates_pages_names = {
             'posts/index.html': reverse('posts:index'),
             'posts/group_list.html': reverse('posts:group_list',
-                                             kwargs={'slug': 'test_slug'}),
+                                             kwargs={'slug': self.group.slug}),
             'posts/profile.html': reverse('posts:profile',
                                           kwargs={'username': self.user}),
             'posts/post_detail.html': reverse('posts:post_detail',
@@ -97,7 +99,7 @@ class PostPagesTests(TestCase):
         """Шаблон index передается с соответствующим контекстом."""
         response = self.authorized_client.get(reverse('posts:index'))
         post_text_0 = {
-            response.context['post'].text: 'Тестовый текст',
+            response.context['post'].text: self.post.text,
             response.context['post'].author: self.user.username,
             response.context['post'].group: self.group
         }
@@ -151,6 +153,12 @@ class PostPagesTests(TestCase):
             with self.subTest(value=value):
                 form_field = response.context.get('form').fields.get(value)
                 self.assertIsInstance(form_field, expected)
+                self.assertIn('form', response.context)
+                self.assertNotIn('is_edit', response.context)
+        
+        form = response.context.get('form')
+        self.assertIsInstance(form, PostForm)
+
 
     def test_post_edit_show_correct_context(self):
         """Шаблон post_edit передается с соответствующим контекстом."""

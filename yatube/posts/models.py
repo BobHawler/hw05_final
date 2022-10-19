@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.db.models import UniqueConstraint
 from django.utils.text import slugify
 
 User = get_user_model()
@@ -63,7 +64,7 @@ class Post(models.Model):
     )
 
     class Meta:
-        ordering = ['-pub_date']
+        ordering = ('-pub_date', )
         verbose_name = 'Пост'
         verbose_name_plural = 'Посты'
 
@@ -82,10 +83,11 @@ class Comment(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['created']
+        ordering = ('created', )
 
 
 class Follow(models.Model):
+    UniqueConstraint(fields=['user', 'author'], name='unique_subscription')
     user = models.ForeignKey(User, on_delete=models.CASCADE,
                              related_name='follower')
     author = models.ForeignKey(User, on_delete=models.CASCADE,
