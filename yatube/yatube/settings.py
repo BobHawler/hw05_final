@@ -3,7 +3,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
-SECRET_KEY = '-8x8su%w(4paci5-qx75y=70&$o0v-h3u=14&osor-72#qw*p%'
+SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
 DEBUG = True
 
